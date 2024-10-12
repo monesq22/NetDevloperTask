@@ -1,0 +1,6 @@
+@NetDevloperTask_HostAddress = http://localhost:5232
+
+GET {{NetDevloperTask_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
