@@ -16,7 +16,7 @@ namespace NetDevloperTask.Repositories
         public async Task<BusinessCard> CreateBusinessCardAsync(BusinessCard businessCard)
         {
             await _context.BusinessCards.AddAsync(businessCard);
-            await _context.SaveChangesAsync();  // Commit the changes directly here
+            await _context.SaveChangesAsync();
             return businessCard;
         }
         public async Task<BusinessCard> GetBusinessCardByIdAsync(int id)

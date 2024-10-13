@@ -22,6 +22,7 @@ namespace NetDevloperTask.Data
                 entity.Property(e => e.Phone).IsRequired();
                 entity.Property(e => e.Address).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Photo).HasMaxLength(1048576); // 1MB
+                entity.Property(e => e.DateOfBirth).IsRequired().HasColumnType("date");
             });
         }
     }

@@ -7,11 +7,11 @@ namespace NetDevloperTask.Services.interfaces
         Task<BusinessCard> CreateBusinessCardAsync(BusinessCard businessCard);
         //Task<BusinessCard> CreateBusinessCardFromQrCodeAsync(string qrCodeData);
         Task<BusinessCard> CreateBusinessCardFromFileAsync(string fileData, string fileType);
-        Task<BusinessCard> GetBusinessCardByIdAsync(int id); // Add this method
-        Task<IEnumerable<BusinessCard>> GetAllBusinessCardsAsync();  // New method to fetch all
-        Task DeleteBusinessCardAsync(int id);  // No return value for delete
-        Task<string> ExportBusinessCardsToXmlAsync();  // For XML export
-        Task<string> ExportBusinessCardsToCsvAsync();  // For CSV export
+        Task<BusinessCard> GetBusinessCardByIdAsync(int id);
+        Task<IEnumerable<BusinessCard>> GetAllBusinessCardsAsync();
+        Task DeleteBusinessCardAsync(int id);
+        Task<string> ExportBusinessCardsToXmlAsync();
+        Task<string> ExportBusinessCardsToCsvAsync(); 
         Task<IEnumerable<BusinessCard>> GetFilteredBusinessCardsAsync(string? name, DateTime? dob, string? phone, string? gender, string? email);
     }
 }

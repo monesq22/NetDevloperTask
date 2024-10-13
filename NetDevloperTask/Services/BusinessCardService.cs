@@ -92,7 +92,7 @@ namespace NetDevloperTask.Services
                 throw new KeyNotFoundException("Business card not found");
             }
 
-            await _repository.DeleteBusinessCardAsync(card);  // Delete without return value
+            await _repository.DeleteBusinessCardAsync(card);
         }
         public async Task<string> ExportBusinessCardsToXmlAsync()
         {
@@ -103,7 +103,7 @@ namespace NetDevloperTask.Services
             using (var stringWriter = new StringWriter())
             {
                 xmlSerializer.Serialize(stringWriter, businessCards);
-                return stringWriter.ToString();  // Return XML string
+                return stringWriter.ToString();
             }
         }
 
@@ -115,7 +115,7 @@ namespace NetDevloperTask.Services
             using (var csvWriter = new CsvWriter(stringWriter, CultureInfo.InvariantCulture))
             {
                 await csvWriter.WriteRecordsAsync(businessCards);
-                return stringWriter.ToString();  // Return CSV string
+                return stringWriter.ToString();
             }
         }
         public async Task<IEnumerable<BusinessCard>> GetFilteredBusinessCardsAsync(string? name, DateTime? dob, string? phone, string? gender, string? email)
