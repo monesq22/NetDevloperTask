@@ -50,14 +50,14 @@ namespace NetDevloperTask.Services
 
         public async Task<BusinessCard> CreateBusinessCardFromFileAsync(string fileData, string fileType)
         {
-            BusinessCard businessCard = null;
+            List<BusinessCard> businessCards = null;
 
             if (fileType == "XML")
             {
-                var serializer = new XmlSerializer(typeof(BusinessCard));
+                var serializer = new XmlSerializer(typeof(List<BusinessCard>));
                 using (var reader = new StringReader(fileData))
                 {
-                    businessCard = (BusinessCard)serializer.Deserialize(reader);
+                    businessCards = (List<BusinessCard>)serializer.Deserialize(reader);
                 }
             }
             else if (fileType == "CSV")
@@ -65,17 +65,25 @@ namespace NetDevloperTask.Services
                 using (var reader = new StringReader(fileData))
                 using (var csv = new CsvReader(reader, System.Globalization.CultureInfo.InvariantCulture))
                 {
-                    businessCard = csv.GetRecord<BusinessCard>();
+                    csv.Context.RegisterClassMap<BusinessCardMap>();
+                    businessCards = csv.GetRecords<BusinessCard>().ToList();
                 }
             }
 
-            if (businessCard != null)
+            if (businessCards != null && businessCards.Any())
             {
-                return await _repository.CreateBusinessCardAsync(businessCard);
+                foreach (var card in businessCards)
+                {
+                    card.Id = 0;  // Ensure Id is not set (auto-generated)
+                    await _repository.CreateBusinessCardAsync(card);
+                }
+
+                return businessCards.First();  // Return the first card or handle as needed
             }
 
             return null;
         }
+
         public async Task<BusinessCard> GetBusinessCardByIdAsync(int id)
         {
             return await _repository.GetBusinessCardByIdAsync(id);
