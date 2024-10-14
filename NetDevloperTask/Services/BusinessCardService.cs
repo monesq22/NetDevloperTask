@@ -23,7 +23,6 @@ namespace NetDevloperTask.Services
             return await _repository.CreateBusinessCardAsync(businessCard);
         }
 
-
         //public async Task<BusinessCard> CreateBusinessCardFromQrCodeAsync(string qrCodeData)
         //{
         //    var reader = new BarcodeReader();
