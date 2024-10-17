@@ -83,8 +83,7 @@ namespace NetDevloperTask.Services
             foreach (var card in businessCards)
             {
                 if (card.Id != 0)
-                    card.Id = 0; // Ensure Id is not set for new records
-                // Validate business card entries before processing
+                    card.Id = 0;
                 Validator.ValidateObject(card, new ValidationContext(card), validateAllProperties: true);
             }
 
@@ -101,8 +100,7 @@ namespace NetDevloperTask.Services
             foreach (var card in records)
             {
                 if (card.Id != 0)
-                    card.Id = 0; // Reset Id for new records
-                // Validate business card entries before processing
+                    card.Id = 0;
                 Validator.ValidateObject(card, new ValidationContext(card), validateAllProperties: true);
             }
 

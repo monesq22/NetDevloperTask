@@ -43,7 +43,7 @@ namespace NetDevloperTask.Controllers
                     ? await _businessCardService.ImportBusinessCardsFromXmlAsync(file.OpenReadStream())
                     : await _businessCardService.ImportBusinessCardsFromCsvAsync(file.OpenReadStream());
 
-                return Ok(importedCards); // Return the parsed data for preview
+                return Ok(importedCards);
             }
             catch (Exception ex)
             {
