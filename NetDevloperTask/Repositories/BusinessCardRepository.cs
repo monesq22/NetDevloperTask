@@ -13,25 +13,30 @@ namespace NetDevloperTask.Repositories
         {
             _context = context;
         }
+
         public async Task<BusinessCard> CreateBusinessCardAsync(BusinessCard businessCard)
         {
             await _context.BusinessCards.AddAsync(businessCard);
             await _context.SaveChangesAsync();
             return businessCard;
         }
+
         public async Task<BusinessCard> GetBusinessCardByIdAsync(int id)
         {
             return await _context.BusinessCards.FindAsync(id);
         }
+
         public async Task<IEnumerable<BusinessCard>> GetAllBusinessCardsAsync()
         {
             return await _context.BusinessCards.ToListAsync();
         }
+
         public async Task DeleteBusinessCardAsync(BusinessCard businessCard)
         {
             _context.BusinessCards.Remove(businessCard);
             await _context.SaveChangesAsync();
         }
+
         public async Task<IEnumerable<BusinessCard>> GetFilteredBusinessCardsAsync(string? name, DateTime? dob, string? phone, string? gender, string? email)
         {
             return await _context.BusinessCards
