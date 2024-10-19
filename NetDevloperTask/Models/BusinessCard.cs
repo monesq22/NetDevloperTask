@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Xml.Serialization;
 
 namespace NetDevloperTask.Models
 {
     public class BusinessCard
     {
+        [XmlIgnore]
         public int Id { get; set; }
 
         [Required]

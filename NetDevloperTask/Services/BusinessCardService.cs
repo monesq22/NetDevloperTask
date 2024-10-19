@@ -48,12 +48,24 @@ namespace NetDevloperTask.Services
         {
             var businessCards = await _repository.GetAllBusinessCardsAsync();
 
+            var businessCardsForExport = businessCards.Select(card => new BusinessCard
+            {
+                Name = card.Name,
+                Gender = card.Gender,
+                DateOfBirth = card.DateOfBirth,
+                Email = card.Email,
+                Phone = card.Phone,
+                Address = card.Address,
+                Photo = card.Photo
+            }).ToList();
+
             var xmlSerializer = new XmlSerializer(typeof(List<BusinessCard>));
 
             using var stringWriter = new StringWriter();
-            xmlSerializer.Serialize(stringWriter, businessCards.ToList());
+            xmlSerializer.Serialize(stringWriter, businessCardsForExport);
             return stringWriter.ToString();
         }
+
 
         public async Task<string> ExportBusinessCardsToCsvAsync()
         {
@@ -61,6 +73,7 @@ namespace NetDevloperTask.Services
 
             using var stringWriter = new StringWriter();
             using var csvWriter = new CsvWriter(stringWriter, CultureInfo.InvariantCulture);
+            csvWriter.Context.RegisterClassMap<BusinessCardMap>();
             await csvWriter.WriteRecordsAsync(businessCards);
             return stringWriter.ToString();
         }
@@ -82,8 +95,6 @@ namespace NetDevloperTask.Services
 
             foreach (var card in businessCards)
             {
-                if (card.Id != 0)
-                    card.Id = 0;
                 Validator.ValidateObject(card, new ValidationContext(card), validateAllProperties: true);
             }
 
@@ -94,13 +105,12 @@ namespace NetDevloperTask.Services
         {
             using var streamReader = new StreamReader(csvStream);
             using var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
+            csvReader.Context.RegisterClassMap<BusinessCardMap>();
 
             var records = await csvReader.GetRecordsAsync<BusinessCard>().ToListAsync();
 
             foreach (var card in records)
             {
-                if (card.Id != 0)
-                    card.Id = 0;
                 Validator.ValidateObject(card, new ValidationContext(card), validateAllProperties: true);
             }
 
