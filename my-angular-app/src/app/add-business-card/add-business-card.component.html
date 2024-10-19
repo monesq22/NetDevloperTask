@@ -1,0 +1,146 @@
+<form [formGroup]="businessCardForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="name">Name</label>
+    <input id="name" type="text" formControlName="name">
+    <div *ngIf="businessCardForm.controls['name'].invalid && businessCardForm.controls['name'].touched">
+      <small *ngIf="businessCardForm.controls['name'].errors?.['required']">Name is required.</small>
+      <small *ngIf="businessCardForm.controls['name'].errors?.['maxlength']">Name cannot exceed 100 characters.</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="gender">Gender</label>
+    <select id="gender" formControlName="gender">
+      <option value="">Select</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select>
+    <div *ngIf="businessCardForm.controls['gender'].invalid && businessCardForm.controls['gender'].touched">
+      <small *ngIf="businessCardForm.controls['gender'].errors?.['required']">Gender is required.</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="dateOfBirth">Date of Birth</label>
+    <input id="dateOfBirth" type="date" formControlName="dateOfBirth">
+    <div *ngIf="businessCardForm.controls['dateOfBirth'].invalid && businessCardForm.controls['dateOfBirth'].touched">
+      <small *ngIf="businessCardForm.controls['dateOfBirth'].errors?.['required']">Date of Birth is required.</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="email">Email</label>
+    <input id="email" type="email" formControlName="email">
+    <div *ngIf="businessCardForm.controls['email'].invalid && businessCardForm.controls['email'].touched">
+      <small *ngIf="businessCardForm.controls['email'].errors?.['required']">Email is required.</small>
+      <small *ngIf="businessCardForm.controls['email'].errors?.['email']">Invalid email format.</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="phone">Phone</label>
+    <input id="phone" type="text" formControlName="phone">
+    <div *ngIf="businessCardForm.controls['phone'].invalid && businessCardForm.controls['phone'].touched">
+      <small *ngIf="businessCardForm.controls['phone'].errors?.['required']">Phone number is required.</small>
+      <small *ngIf="businessCardForm.controls['phone'].errors?.['pattern']">Phone number must be 10 digits.</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="address">Address</label>
+    <input id="address" type="text" formControlName="address">
+    <div *ngIf="businessCardForm.controls['address'].invalid && businessCardForm.controls['address'].touched">
+      <small *ngIf="businessCardForm.controls['address'].errors?.['required']">Address is required.</small>
+      <small *ngIf="businessCardForm.controls['address'].errors?.['maxlength']">Address cannot exceed 200 characters.</small>
+    </div>
+  </div>
+
+  <div>
+    <label for="photo">Upload Photo</label>
+    <input type="file" (change)="onFileSelected($event)" />
+  </div>
+
+  <!-- Card Preview Section -->
+  <div *ngIf="businessCardForm.dirty || photoPreview" class="card-preview">
+    <h2>Business Card Preview</h2>
+    <div class="card-container">
+      <div *ngIf="businessCardForm.controls['name'].value">
+        <strong>Name:</strong> {{ businessCardForm.controls['name'].value }}
+      </div>
+
+      <div *ngIf="businessCardForm.controls['gender'].value">
+        <strong>Gender:</strong> {{ businessCardForm.controls['gender'].value }}
+      </div>
+
+      <div *ngIf="businessCardForm.controls['dateOfBirth'].value">
+        <strong>Date of Birth:</strong> {{ businessCardForm.controls['dateOfBirth'].value }}
+      </div>
+
+      <div *ngIf="businessCardForm.controls['email'].value">
+        <strong>Email:</strong> {{ businessCardForm.controls['email'].value }}
+      </div>
+
+      <div *ngIf="businessCardForm.controls['phone'].value">
+        <strong>Phone:</strong> {{ businessCardForm.controls['phone'].value }}
+      </div>
+
+      <div *ngIf="businessCardForm.controls['address'].value">
+        <strong>Address:</strong> {{ businessCardForm.controls['address'].value }}
+      </div>
+
+      <div *ngIf="photoPreview">
+        <strong>Photo Preview:</strong>
+        <img [src]="photoPreview" alt="Photo Preview" style="max-width: 100%; height: auto;">
+      </div>
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="businessCardForm.invalid">Add Business Card</button>
+</form>
+
+<hr>
+
+<!-- Section for file import and preview -->
+<div>
+  <h2>Import Business Cards (XML/CSV)</h2>
+  <input type="file" (change)="onFileImportSelected($event)" />
+</div>
+<div>
+  <ngx-file-drop (onFileDrop)="onFileDropped($event)">
+    <div class="file-drop-area">
+      <p>Drag and drop XML/CSV files here or click to select files.</p>
+    </div>
+  </ngx-file-drop>
+</div>
+
+<!-- Preview of imported business cards -->
+<div *ngIf="previewData.length > 0">
+  <h3>Preview Imported Business Cards</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Date of Birth</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>Photo Preview</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let card of previewData">
+        <td>{{ card.name }}</td>
+        <td>{{ card.gender }}</td>
+        <td>{{ card.dateOfBirth }}</td>
+        <td>{{ card.email }}</td>
+        <td>{{ card.phone }}</td>
+        <td>{{ card.address }}</td>
+        <td *ngIf="card.photo">
+          <img [src]="card.photo" alt="Photo" style="max-width: 100px; height: auto;">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button type="button" (click)="saveImportedCards()">Save Imported Cards</button>
+</div>

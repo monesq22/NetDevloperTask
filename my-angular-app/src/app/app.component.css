@@ -1,0 +1,93 @@
+/* Basic resets */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7f9;
+}
+
+/* Toolbar design */
+.toolbar {
+  display: flex;
+  align-items: center;
+  background-color: #007bff;
+  padding: 15px 20px;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.toolbar span {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+/* Material buttons */
+button[mat-button] {
+  background-color: white;
+  color: #007bff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-transform: uppercase;
+}
+
+button[mat-button]:hover {
+  background-color: #f0f0f0;
+}
+
+button[mat-button][color="primary"] {
+  background-color: white;
+  color: #007bff;
+}
+
+button[mat-button][color="primary"]:hover {
+  background-color: #e0e0ff;
+}
+
+button[mat-button][color="accent"] {
+  background-color: #ff4081;
+  color: white;
+}
+
+button[mat-button][color="accent"]:hover {
+  background-color: #e91e63;
+}
+
+/* Main content area */
+.content {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  min-height: 400px;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  button[mat-button] {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .content {
+    padding: 15px;
+  }
+}

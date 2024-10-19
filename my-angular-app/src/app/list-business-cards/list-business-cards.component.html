@@ -1,0 +1,64 @@
+<h2>Business Cards</h2>
+
+<!-- Search options -->
+<div>
+  <h3>Search Business Cards</h3>
+  <label>Name:</label>
+  <input type="text" [(ngModel)]="searchParams.name" (input)="filterBusinessCards()" placeholder="Search by name">
+
+  <label>Email:</label>
+  <input type="text" [(ngModel)]="searchParams.email" (input)="filterBusinessCards()" placeholder="Search by email">
+
+  <label>Phone:</label>
+  <input type="text" [(ngModel)]="searchParams.phone" (input)="filterBusinessCards()" placeholder="Search by phone">
+
+  <label>Date of Birth:</label>
+  <input type="date" [(ngModel)]="searchParams.dateOfBirth" (input)="filterBusinessCards()" placeholder="Search by date of birth">
+
+  <label>Gender:</label>
+  <select [(ngModel)]="searchParams.gender" (change)="filterBusinessCards()">
+    <option value="">Select Gender</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+  </select>
+
+  <label>Address:</label>
+  <input type="text" [(ngModel)]="searchParams.address" (input)="filterBusinessCards()" placeholder="Search by address">
+
+  <button (click)="clearFilters()">Clear Filters</button>
+</div>
+
+<!-- Business Cards List-->
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Date Of Birth</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Gender</th>
+      <th>Address</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let card of filteredBusinessCards">
+      <td>{{ card.name }}</td>
+      <td>{{ card.dateOfBirth }}</td>
+      <td>{{ card.email }}</td>
+      <td>{{ card.phone }}</td>
+      <td>{{ card.gender }}</td>
+      <td>{{ card.address }}</td>
+      <td>
+        <button (click)="deleteBusinessCard(card.id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Export options -->
+<div>
+  <h3>Export All Business Cards</h3>
+  <button (click)="exportBusinessCardsAsXml()">Export as XML</button>
+  <button (click)="exportBusinessCardsAsCsv()">Export as CSV</button>
+</div>
