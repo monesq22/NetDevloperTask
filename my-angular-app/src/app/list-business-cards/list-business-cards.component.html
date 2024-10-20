@@ -44,7 +44,7 @@
   <tbody>
     <tr *ngFor="let card of filteredBusinessCards">
       <td>{{ card.name }}</td>
-      <td>{{ card.dateOfBirth }}</td>
+      <td>{{ card.dateOfBirth | date: 'MM/dd/yyyy' }}</td>
       <td>{{ card.email }}</td>
       <td>{{ card.phone }}</td>
       <td>{{ card.gender }}</td>

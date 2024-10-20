@@ -62,7 +62,7 @@ namespace NetDevloperTask.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAl()
+        public async Task<IActionResult> GetAll()
         {
             var cards = await _businessCardService.GetAllBusinessCardsAsync();
             return Ok(cards);
@@ -85,22 +85,21 @@ namespace NetDevloperTask.Controllers
         [HttpGet("export")]
         public async Task<IActionResult> Export([FromQuery] string fileType)
         {
-            if (string.IsNullOrWhiteSpace(fileType))
-                return BadRequest("File type is required. Please specify 'csv' or 'xml'.");
-
-            fileType = fileType.ToLower();
-            switch (fileType)
             {
-                case "xml":
-                    var xmlData = await _businessCardService.ExportBusinessCardsToXmlAsync();
-                    return File(Encoding.UTF8.GetBytes(xmlData), "application/xml", "BusinessCards.xml");
+                fileType = fileType.ToLower();
+                switch (fileType)
+                {
+                    case "xml":
+                        var xmlData = await _businessCardService.ExportBusinessCardsToXmlAsync();
+                        return File(Encoding.UTF8.GetBytes(xmlData), "application/xml", "BusinessCards.xml");
 
-                case "csv":
-                    var csvData = await _businessCardService.ExportBusinessCardsToCsvAsync();
-                    return File(Encoding.UTF8.GetBytes(csvData), "text/csv", "BusinessCards.csv");
+                    case "csv":
+                        var csvData = await _businessCardService.ExportBusinessCardsToCsvAsync();
+                        return File(Encoding.UTF8.GetBytes(csvData), "text/csv", "BusinessCards.csv");
 
-                default:
-                    return BadRequest("Invalid file type. Please specify 'csv' or 'xml'.");
+                    default:
+                        return BadRequest();
+                }
             }
         }
 
@@ -110,5 +109,5 @@ namespace NetDevloperTask.Controllers
             var cards = await _businessCardService.GetFilteredBusinessCardsAsync(name, dob, phone, gender, email);
             return Ok(cards);
         }
-    }
+    } 
 }

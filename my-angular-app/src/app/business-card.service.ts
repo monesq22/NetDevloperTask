@@ -26,7 +26,7 @@ export class BusinessCardService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-
+  // export business cards to file (XML/CSV)
   exportBusinessCards(fileType: string): Observable<Blob> {
     const exportUrl = `${this.apiUrl}/export?fileType=${fileType}`;
     return this.http.get(exportUrl, { responseType: 'blob' });

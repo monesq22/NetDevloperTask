@@ -132,7 +132,7 @@
       <tr *ngFor="let card of previewData">
         <td>{{ card.name }}</td>
         <td>{{ card.gender }}</td>
-        <td>{{ card.dateOfBirth }}</td>
+        <td>{{ card.dateOfBirth | date: 'MM/dd/yyyy' }}</td>
         <td>{{ card.email }}</td>
         <td>{{ card.phone }}</td>
         <td>{{ card.address }}</td>

@@ -31,13 +31,13 @@ public class BusinessCardControllerTests
         _mockService.Setup(s => s.CreateBusinessCardAsync(It.IsAny<BusinessCard>())).ReturnsAsync(card);
 
         // Act
-        var result = await _controller.CreateBusinessCard(card);
+        var result = await _controller.Create(card);
 
         // Assert
         var createdResult = result as CreatedAtActionResult;
         createdResult.Should().NotBeNull();
         createdResult.Value.Should().Be(card);
-        createdResult.ActionName.Should().Be(nameof(BusinessCardController.GetBusinessCardById));
+        createdResult.ActionName.Should().Be(nameof(BusinessCardController.GetById));
     }
 
     // Test for ImportBusinessCardFromFile - Null or empty file
@@ -48,7 +48,7 @@ public class BusinessCardControllerTests
         IFormFile file = null;
 
         // Act
-        var result = await _controller.ImportBusinessCardFromFile(file);
+        var result = await _controller.Import(file);
 
         // Assert
         result.Should().BeOfType<BadRequestObjectResult>()
@@ -67,7 +67,7 @@ public class BusinessCardControllerTests
         fileMock.Setup(f => f.Length).Returns(100); // Simulate a non-empty file
 
         // Act
-        var result = await _controller.ImportBusinessCardFromFile(fileMock.Object);
+        var result = await _controller.Import(fileMock.Object);
 
         // Assert
         result.Should().BeOfType<BadRequestObjectResult>()
@@ -93,7 +93,7 @@ public class BusinessCardControllerTests
         _mockService.Setup(s => s.ImportBusinessCardsFromCsvAsync(It.IsAny<Stream>())).ReturnsAsync(businessCards);
 
         // Act
-        var result = await _controller.ImportBusinessCardFromFile(fileMock.Object);
+        var result = await _controller.Import(fileMock.Object);
 
         // Assert
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
@@ -120,7 +120,7 @@ public class BusinessCardControllerTests
         _mockService.Setup(s => s.ImportBusinessCardsFromXmlAsync(It.IsAny<Stream>())).ReturnsAsync(businessCards);
 
         // Act
-        var result = await _controller.ImportBusinessCardFromFile(fileMock.Object);
+        var result = await _controller.Import(fileMock.Object);
 
         // Assert
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
@@ -138,7 +138,7 @@ public class BusinessCardControllerTests
         _mockService.Setup(s => s.GetBusinessCardByIdAsync(cardId)).ReturnsAsync((BusinessCard)null);
 
         // Act
-        var result = await _controller.GetBusinessCardById(cardId);
+        var result = await _controller.GetById(cardId);
 
         // Assert
         result.Should().BeOfType<NotFoundResult>();
@@ -153,7 +153,7 @@ public class BusinessCardControllerTests
         _mockService.Setup(s => s.GetBusinessCardByIdAsync(cardId)).ReturnsAsync(card);
 
         // Act
-        var result = await _controller.GetBusinessCardById(cardId);
+        var result = await _controller.GetById(cardId);
 
         // Assert
         result.Should().BeOfType<OkObjectResult>()
@@ -173,7 +173,7 @@ public class BusinessCardControllerTests
         _mockService.Setup(s => s.GetAllBusinessCardsAsync()).ReturnsAsync(cards);
 
         // Act
-        var result = await _controller.GetAllBusinessCards();
+        var result = await _controller.GetAll();
 
         // Assert
         result.Should().BeOfType<OkObjectResult>()
@@ -189,7 +189,7 @@ public class BusinessCardControllerTests
         _mockService.Setup(s => s.DeleteBusinessCardAsync(cardId)).Returns(Task.CompletedTask);
 
         // Act
-        var result = await _controller.DeleteBusinessCard(cardId);
+        var result = await _controller.Delete(cardId);
 
         // Assert
         result.Should().BeOfType<NoContentResult>();
@@ -203,7 +203,7 @@ public class BusinessCardControllerTests
         _mockService.Setup(s => s.DeleteBusinessCardAsync(cardId)).Throws<KeyNotFoundException>();
 
         // Act
-        var result = await _controller.DeleteBusinessCard(cardId);
+        var result = await _controller.Delete(cardId);
 
         // Assert
         result.Should().BeOfType<NotFoundResult>();
@@ -218,16 +218,16 @@ public class BusinessCardControllerTests
         _mockService.Setup(s => s.ExportBusinessCardsToXmlAsync()).ReturnsAsync(xmlData);
 
         // Act
-        var result = await _controller.ExportBusinessCardsToXml();
+        var result = await _controller.Export("xml");
 
         // Assert
         var fileResult = result as FileContentResult;
         fileResult.Should().NotBeNull();
-        fileResult.FileContents.Should().NotBeEmpty();
+        fileResult!.FileContents.Should().NotBeEmpty();
         fileResult.ContentType.Should().Be("application/xml");
+        fileResult.FileDownloadName.Should().Be("BusinessCards.xml");
     }
 
-    // Test for ExportBusinessCardsToCsv
     [Fact]
     public async Task ExportBusinessCardsToCsv_ShouldReturnCsvFile_WhenCardsExist()
     {
@@ -236,12 +236,14 @@ public class BusinessCardControllerTests
         _mockService.Setup(s => s.ExportBusinessCardsToCsvAsync()).ReturnsAsync(csvData);
 
         // Act
-        var result = await _controller.ExportBusinessCardsToCsv();
+        var result = await _controller.Export("csv");
 
         // Assert
         var fileResult = result as FileContentResult;
         fileResult.Should().NotBeNull();
-        fileResult.FileContents.Should().NotBeEmpty();
+        fileResult!.FileContents.Should().NotBeEmpty();
         fileResult.ContentType.Should().Be("text/csv");
+        fileResult.FileDownloadName.Should().Be("BusinessCards.csv");
     }
+
 }

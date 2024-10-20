@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BusinessCardService } from '../business-card.service';
-import { MatSnackBar } from '@angular/material/snack-bar'; // Import MatSnackBar
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxFileDropEntry, FileSystemFileEntry } from 'ngx-file-drop';
 
 @Component({
@@ -20,7 +20,7 @@ export class AddBusinessCardComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private businessCardService: BusinessCardService,
-    private snackBar: MatSnackBar // Inject MatSnackBar
+    private snackBar: MatSnackBar
   ) {
     this.businessCardForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
@@ -59,10 +59,10 @@ export class AddBusinessCardComponent implements OnInit {
         () => {
           this.businessCardForm.reset();
           this.photoPreview = null;
-          this.showNotification('Business card added successfully'); // Show success notification
+          this.showNotification('Business card added successfully');
         },
         () => {
-          this.showNotification('Error adding business card', 'error'); // Show error notification
+          this.showNotification('Error adding business card', 'error');
         }
       );
     } else {

@@ -60,7 +60,7 @@ export class ListBusinessCardsComponent implements OnInit {
       this.businessCardService.deleteBusinessCard(id).subscribe(
         () => {
           this.showNotification('Business card deleted successfully');
-          this.loadBusinessCards(); // Reload the list after deletion
+          this.loadBusinessCards();
         },
         (error) => {
           this.showNotification('Error deleting business card', 'error');
