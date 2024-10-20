@@ -29,7 +29,7 @@ export class ListBusinessCardsComponent implements OnInit {
     this.businessCardService.getBusinessCards().subscribe(
       (data) => {
         this.businessCards = data;
-        this.filteredBusinessCards = data; // Default to showing all cards
+        this.filteredBusinessCards = data;
       },
       (error) => {
         this.showNotification('Error fetching business cards', 'error');
@@ -70,41 +70,40 @@ export class ListBusinessCardsComponent implements OnInit {
   }
 
   exportBusinessCardsAsXml(): void {
-    this.businessCardService.exportBusinessCardsAsXml().subscribe(
-      (blob) => {
-        this.downloadFile(blob, 'business-cards.xml');
-        this.showNotification('Business cards exported as XML successfully');
-      },
-      (error) => {
-        this.showNotification('Error exporting business cards as XML', 'error');
-      }
-    );
+    this.exportBusinessCards('xml');
   }
 
   exportBusinessCardsAsCsv(): void {
-    this.businessCardService.exportBusinessCardsAsCsv().subscribe(
-      (blob) => {
-        this.downloadFile(blob, 'business-cards.csv');
-        this.showNotification('Business cards exported as CSV successfully');
+    this.exportBusinessCards('csv');
+  }
+
+  private exportBusinessCards(fileType: string): void {
+    this.businessCardService.exportBusinessCards(fileType).subscribe(
+      (blob: Blob) => {
+        const fileName = fileType === 'xml' ? 'business-cards.xml' : 'business-cards.csv';
+        this.downloadFile(blob, fileName, fileType);
       },
-      (error) => {
-        this.showNotification('Error exporting business cards as CSV', 'error');
+      (error: any) => {
+        this.showNotification(`Error exporting business cards as ${fileType.toUpperCase()}`, 'error');
       }
     );
   }
-
-  downloadFile(blob: Blob, fileName: string): void {
+  
+  private downloadFile(blob: Blob, fileName: string, fileType: string): void {
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
     link.download = fileName;
     link.click();
+    
+    this.showNotification(`File ${fileName} downloaded successfully`, 'success');
   }
+  
 
   private showNotification(message: string, type: string = 'success'): void {
     this.snackBar.open(message, '', {
       duration: 3000,
-      horizontalPosition: 'end', // Aligns to the right side
-      verticalPosition: 'top', // Places it at the top
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
       panelClass: type === 'error' ? 'snack-bar-error' : 'snack-bar-success'
     });
   }

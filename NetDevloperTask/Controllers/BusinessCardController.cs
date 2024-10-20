@@ -18,17 +18,17 @@ namespace NetDevloperTask.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBusinessCard([FromBody] BusinessCard businessCard)
+        public async Task<IActionResult> Create([FromBody] BusinessCard businessCard)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var createdCard = await _businessCardService.CreateBusinessCardAsync(businessCard);
-            return CreatedAtAction(nameof(GetBusinessCardById), new { id = createdCard.Id }, createdCard);
+            return CreatedAtAction(nameof(GetById), new { id = createdCard.Id }, createdCard);
         }
 
         [HttpPost("import")]
-        public async Task<IActionResult> ImportBusinessCardFromFile(IFormFile file)
+        public async Task<IActionResult> Import(IFormFile file)
         {
             if (file is null || file.Length == 0)
                 return BadRequest("No file uploaded");
@@ -52,7 +52,7 @@ namespace NetDevloperTask.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBusinessCardById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var card = await _businessCardService.GetBusinessCardByIdAsync(id);
             if (card is null)
@@ -62,14 +62,14 @@ namespace NetDevloperTask.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllBusinessCards()
+        public async Task<IActionResult> GetAl()
         {
             var cards = await _businessCardService.GetAllBusinessCardsAsync();
             return Ok(cards);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBusinessCard(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
@@ -82,22 +82,30 @@ namespace NetDevloperTask.Controllers
             }
         }
 
-        [HttpGet("export/xml")]
-        public async Task<IActionResult> ExportBusinessCardsToXml()
+        [HttpGet("export")]
+        public async Task<IActionResult> Export([FromQuery] string fileType)
         {
-            var xmlData = await _businessCardService.ExportBusinessCardsToXmlAsync();
-            return File(Encoding.UTF8.GetBytes(xmlData), "application/xml", "BusinessCards.xml");
-        }
+            if (string.IsNullOrWhiteSpace(fileType))
+                return BadRequest("File type is required. Please specify 'csv' or 'xml'.");
 
-        [HttpGet("export/csv")]
-        public async Task<IActionResult> ExportBusinessCardsToCsv()
-        {
-            var csvData = await _businessCardService.ExportBusinessCardsToCsvAsync();
-            return File(Encoding.UTF8.GetBytes(csvData), "text/csv", "BusinessCards.csv");
+            fileType = fileType.ToLower();
+            switch (fileType)
+            {
+                case "xml":
+                    var xmlData = await _businessCardService.ExportBusinessCardsToXmlAsync();
+                    return File(Encoding.UTF8.GetBytes(xmlData), "application/xml", "BusinessCards.xml");
+
+                case "csv":
+                    var csvData = await _businessCardService.ExportBusinessCardsToCsvAsync();
+                    return File(Encoding.UTF8.GetBytes(csvData), "text/csv", "BusinessCards.csv");
+
+                default:
+                    return BadRequest("Invalid file type. Please specify 'csv' or 'xml'.");
+            }
         }
 
         [HttpGet("filter")]
-        public async Task<IActionResult> GetFilteredBusinessCards([FromQuery] string? name, [FromQuery] DateTime? dob, [FromQuery] string? phone, [FromQuery] string? gender, [FromQuery] string? email)
+        public async Task<IActionResult> GetFiltered([FromQuery] string? name, [FromQuery] DateTime? dob, [FromQuery] string? phone, [FromQuery] string? gender, [FromQuery] string? email)
         {
             var cards = await _businessCardService.GetFilteredBusinessCardsAsync(name, dob, phone, gender, email);
             return Ok(cards);

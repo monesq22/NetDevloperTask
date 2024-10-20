@@ -26,14 +26,10 @@ export class BusinessCardService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  // Export all business cards as XML
-  exportBusinessCardsAsXml(): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/export/xml`, { responseType: 'blob' });
-  }
 
-  // Export all business cards as CSV
-  exportBusinessCardsAsCsv(): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/export/csv`, { responseType: 'blob' });
+  exportBusinessCards(fileType: string): Observable<Blob> {
+    const exportUrl = `${this.apiUrl}/export?fileType=${fileType}`;
+    return this.http.get(exportUrl, { responseType: 'blob' });
   }
 
   // Import business cards from file (XML/CSV)
